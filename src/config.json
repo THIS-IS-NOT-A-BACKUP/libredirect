@@ -18,26 +18,6 @@
 		}
 	},
 	"services": {
-		"youtubeMusic": {
-			"frontends": {
-				"hyperpipe": {
-					"name": "Hyperpipe",
-					"instanceList": true,
-					"url": "https://codeberg.org/Hyperpipe/Hyperpipe"
-				}
-			},
-			"targets": [
-				"^https?:\\/{2}music\\.youtube\\.com\\/"
-			],
-			"name": "YT Music",
-			"options": {
-				"enabled": false,
-				"frontend": "hyperpipe",
-				"unsupportedUrls": "bypass"
-			},
-			"imageType": "png",
-			"url": "https://music.youtube.com"
-		},
 		"youtube": {
 			"frontends": {
 				"invidious": {
@@ -141,6 +121,32 @@
 			"embeddable": true,
 			"url": "https://youtube.com"
 		},
+		"youtubeMusic": {
+			"frontends": {
+				"hyperpipe": {
+					"name": "Hyperpipe",
+					"instanceList": true,
+					"url": "https://codeberg.org/Hyperpipe/Hyperpipe"
+				},
+				"invidiousMusic": {
+					"name": "Invidious",
+					"embeddable": true,
+					"instanceList": true,
+					"url": "https://invidious.io/"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}music\\.youtube\\.com\\/"
+			],
+			"name": "YT Music",
+			"options": {
+				"enabled": false,
+				"frontend": "hyperpipe",
+				"unsupportedUrls": "bypass"
+			},
+			"imageType": "png",
+			"url": "https://music.youtube.com"
+		},
 		"twitter": {
 			"frontends": {
 				"nitter": {
@@ -182,7 +188,7 @@
 				}
 			},
 			"targets": [
-				"^https?:\\/{2}(www\\.)?twitch\\.(tv|com)\\/"
+				"^https?:\\/{2}(www\\.|clips\\.)?twitch\\.(tv|com)\\/"
 			],
 			"name": "Twitch",
 			"options": {
@@ -562,6 +568,48 @@
 			"imageType": "svgMono",
 			"url": "https://maps.libredirect.invalid"
 		},
+		"sendFiles": {
+			"frontends": {
+				"send": {
+					"name": "Send",
+					"instanceList": true,
+					"url": "https://gitlab.com/timvisee/send"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}send\\.libredirect\\.invalid",
+				"^https?:\\/{2}send\\.firefox\\.com\\/?$",
+				"^https?:\\/{2}sendfiles\\.online\\/?$"
+			],
+			"name": "Send Files",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "send"
+			},
+			"imageType": "svgMono",
+			"url": "https://send.libredirect.invalid"
+		},
+		"textStorage": {
+			"frontends": {
+				"privateBin": {
+					"name": "PrivateBin",
+					"instanceList": true,
+					"url": "https://privatebin.info"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}paste\\.libredirect\\.invalid"
+			],
+			"name": "Paste Text",
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "privateBin"
+			},
+			"imageType": "svgMono",
+			"url": "https://paste.libredirect.invalid"
+		},
 		"reuters": {
 			"frontends": {
 				"neuters": {
@@ -844,6 +892,26 @@
 			},
 			"imageType": "svg",
 			"url": "https://www.instructables.com"
+		},
+		"meet": {
+			"name": "Meet",
+			"frontends": {
+				"jitsi": {
+					"name": "Jitsi",
+					"instanceList": true,
+					"url": "https://jitsi.org"
+				}
+			},
+			"targets": [
+				"^https?:\\/{2}meet\\.libredirect\\.invalid\\/"
+			],
+			"options": {
+				"enabled": false,
+				"unsupportedUrls": "bypass",
+				"frontend": "jitsi"
+			},
+			"imageType": "svgMono",
+			"url": "https://meet.libredirect.invalid"
 		},
 		"wolframAlpha": {
 			"frontends": {

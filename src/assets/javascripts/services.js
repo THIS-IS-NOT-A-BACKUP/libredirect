@@ -496,6 +496,13 @@ function redirect(url, type, initiator, forceRedirection) {
 			}
 			return `${randomInstance}${url.pathname}${url.search}`
 		}
+		case "invidiousMusic": {
+			if (url.hostname == "youtu.be" || url.hostname.endsWith("youtube.com") && url.pathname.startsWith("/live")) {
+				const watch = url.pathname.substring(url.pathname.lastIndexOf('/') + 1)
+				return `${randomInstance}/watch?v=${watch}`
+			}
+			return `${randomInstance}${url.pathname}${url.search}`
+		}
 		case "libremdb": {
 			if (url.pathname.startsWith("/Name")) {
 				for (const [key, value] of url.searchParams.entries()) {
@@ -521,6 +528,12 @@ function redirect(url, type, initiator, forceRedirection) {
 				return `${randomInstance}/stream?url=${encodeURIComponent(url.href)}`
 			}
 			return `${randomInstance}`
+		}
+		case "safetwitch": {
+			if (url.hostname.startsWith("clips.")) {
+				return `${randomInstance}/clip${url.pathname}${url.search}`
+			}
+			return `${randomInstance}${url.pathname}${url.search}`
 		}
 		default: {
 			return `${randomInstance}${url.pathname}${url.search}`
