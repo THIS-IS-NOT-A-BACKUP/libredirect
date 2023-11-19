@@ -551,12 +551,15 @@ function redirect(url, type, initiator, forceRedirection) {
 			}
 			return `${randomInstance}`
 		}
-		case "twineo": 
+		case "twineo":
 		case "safetwitch": {
 			if (url.hostname.startsWith("clips.")) {
 				return `${randomInstance}/clip${url.pathname}${url.search}`
 			}
 			return `${randomInstance}${url.pathname}${url.search}`
+		}
+		case "tekstoLibre": {
+			return `${randomInstance}/?${url.pathname.slice(1)}`;
 		}
 		default: {
 			return `${randomInstance}${url.pathname}${url.search}`
@@ -671,6 +674,9 @@ async function reverse(url) {
 				}
 				return
 			}
+			case "tekstowo": {
+				return `${config.services[service].url}/${url.search.slice(1)}`
+			}
 			default:
 				return
 		}
@@ -724,6 +730,7 @@ const defaultInstances = {
 	'proxigram': ['https://proxigram.privacyfrontends.repl.co'],
 	'tuboYoutube': ['https://tubo.migalmoreno.com'],
 	'tuboSoundcloud': ['https://tubo.migalmoreno.com'],
+	'tekstoLibre': ['https://davilarek.github.io/TekstoLibre'],
 }
 
 function initDefaults() {
@@ -795,6 +802,13 @@ function processUpdate() {
 				}
 				else if (frontend in options && !(frontend in config.services[service].frontends)) {
 					delete options[frontend]
+				}
+			}
+
+			for (const frontend of options.popupServices) {
+				if (!Object.keys(config.services).includes(frontend)) {
+					const i = options.popupServices.indexOf(frontend);
+					if (i > -1) options.popupServices.splice(i, 1);
 				}
 			}
 		}
