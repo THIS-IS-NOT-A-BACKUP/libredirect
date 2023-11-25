@@ -68,10 +68,11 @@ async function redirectAsync(url, type, initiator, forceRedirection) {
  * @param {boolean} forceRedirection
  * @returns {string | undefined}
  */
-function redirect(url, type, initiator, forceRedirection) {
+function redirect(url, type, initiator, forceRedirection, incognito) {
 	if (type != "main_frame" && type != "sub_frame" && type != "image") return
 	let randomInstance
 	let frontend
+	if (!forceRedirection && options.redirectOnlyInIncognito == true && !incognito) return
 	for (const service in config.services) {
 		if (!forceRedirection && !options[service].enabled) continue
 
@@ -166,6 +167,10 @@ function redirect(url, type, initiator, forceRedirection) {
 		case "freetube": {
 			return 'freetube://' + url.href
 		}
+		case "freetubePwa": {
+			return 'freetube://' + url.href
+		}
+
 		case "poketube": {
 			if (url.pathname.startsWith('/channel')) {
 				const reg = /\/channel\/(.*)\/?$/.exec(url.pathname)
@@ -543,10 +548,11 @@ function redirect(url, type, initiator, forceRedirection) {
 			return `${randomInstance}`
 		}
 		case "tuboSoundcloud": {
-			if (url.pathname.match(/\/user[^\/]+(\/$|$)/)) {
+			if (url.pathname == '/') return `${randomInstance}?kiosk?serviceId=1`
+			if (url.pathname.match(/^\/[^\/]+(\/$|$)/)) {
 				return `${randomInstance}/channel?url=${encodeURIComponent(url.href)}`
 			}
-			if (url.pathname.match(/\/user[^\/]+\/[^\/]+/)) {
+			if (url.pathname.match(/^\/[^\/]+\/[^\/]+/)) {
 				return `${randomInstance}/stream?url=${encodeURIComponent(url.href)}`
 			}
 			return `${randomInstance}`
@@ -560,6 +566,10 @@ function redirect(url, type, initiator, forceRedirection) {
 		}
 		case "tekstoLibre": {
 			return `${randomInstance}/?${url.pathname.slice(1)}`;
+		}
+		case "skyview": {
+			if (url.pathname == '/') return randomInstance
+			return `${randomInstance}?url=${encodeURIComponent(url.href)}`
 		}
 		default: {
 			return `${randomInstance}${url.pathname}${url.search}`
@@ -731,6 +741,7 @@ const defaultInstances = {
 	'tuboYoutube': ['https://tubo.migalmoreno.com'],
 	'tuboSoundcloud': ['https://tubo.migalmoreno.com'],
 	'tekstoLibre': ['https://davilarek.github.io/TekstoLibre'],
+	'skyview': ['https://skyview.social'],
 }
 
 function initDefaults() {
@@ -753,9 +764,10 @@ function initDefaults() {
 				url: [],
 				regex: [],
 			}
-			options['theme'] = "detect"
-			options['popupServices'] = ["youtube", "twitter", "tiktok", "imgur", "reddit", "quora", "translate", "maps"]
-			options['fetchInstances'] = 'github'
+			options.theme = "detect"
+			options.popupServices = ["youtube", "twitter", "tiktok", "imgur", "reddit", "quora", "translate", "maps"]
+			options.fetchInstances = 'github'
+			options.redirectOnlyInIncognito = false
 
 			options = { ...options, ...defaultInstances }
 
