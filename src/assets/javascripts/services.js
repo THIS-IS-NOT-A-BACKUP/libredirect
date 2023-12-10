@@ -445,9 +445,7 @@ function redirect(url, type, initiator, forceRedirection, incognito) {
 			return `${randomInstance}${url.pathname}${url.search}`
 		}
 		case "mikuInvidious": {
-			console.log("Hello?")
 			if (url.hostname == "bilibili.com" || url.hostname == "www.bilibili.com" || url.hostname == 'b23.tv') {
-				console.log('wewe')
 				return `${randomInstance}${url.pathname}${url.search}`
 			}
 			if (url.hostname == "space.bilibili.com") {
@@ -500,7 +498,6 @@ function redirect(url, type, initiator, forceRedirection, incognito) {
 		}
 		case "quetre": {
 			const regex = /([a-z]+)\.quora\.com/.exec(url.hostname)
-			console.log(regex)
 			if (regex) {
 				const lang = regex[1]
 				url.searchParams.append("lang", lang)
@@ -570,6 +567,21 @@ function redirect(url, type, initiator, forceRedirection, incognito) {
 		case "skyview": {
 			if (url.pathname == '/') return randomInstance
 			return `${randomInstance}?url=${encodeURIComponent(url.href)}`
+		}
+		case "priviblur": {
+			if (url.hostname.startsWith("blog"))
+				return `${randomInstance}/blog${url.pathname}${url.search}`
+
+			if (url.hostname.startsWith("assets"))
+				return `${randomInstance}/assets${url.pathname}${url.search}`
+
+			if (url.hostname.startsWith("static"))
+				return `${randomInstance}/static${url.pathname}${url.search}`
+
+			const reg = /^([0-9]+)\.media\.tumblr\.com/.exec(url.hostname)
+			if (reg)
+				return `${randomInstance}/media/${reg[1]}${url.pathname}${url.search}`
+			return `${randomInstance}${url.pathname}${url.search}`
 		}
 		default: {
 			return `${randomInstance}${url.pathname}${url.search}`
@@ -742,6 +754,7 @@ const defaultInstances = {
 	'tuboSoundcloud': ['https://tubo.migalmoreno.com'],
 	'tekstoLibre': ['https://davilarek.github.io/TekstoLibre'],
 	'skyview': ['https://skyview.social'],
+	'priviblur': ['https://pb.bloat.cat'],
 }
 
 function initDefaults() {
