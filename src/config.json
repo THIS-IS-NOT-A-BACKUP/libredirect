@@ -107,6 +107,12 @@
 					"embeddable": false,
 					"instanceList": false,
 					"url": "https://github.com/MarmadileManteater/FreeTubeCordova"
+				},
+				"viewtube": {
+					"name": "ViewTube",
+					"embeddable": false,
+					"instanceList": true,
+					"url": "https://github.com/ViewTube/viewtube"
 				}
 			},
 			"targets": [
@@ -211,6 +217,12 @@
 					"name": "Libreddit",
 					"instanceList": true,
 					"url": "https://github.com/spikecodes/libreddit",
+					"localhost": true
+				},
+				"redlib": {
+					"name": "Redlib",
+					"instanceList": true,
+					"url": "https://github.com/redlib-org/redlib",
 					"localhost": true
 				},
 				"teddit": {
@@ -880,10 +892,10 @@
 					"instanceList": true,
 					"url": "https://benbusby.com/projects/whoogle-search/"
 				},
-				"librex": {
-					"name": "LibreX",
+				"librey": {
+					"name": "LibreY",
 					"instanceList": true,
-					"url": "https://github.com/hnhx/librex"
+					"url": "https://github.com/Ahwxorg/librey/"
 				},
 				"4get": {
 					"name": "4get",

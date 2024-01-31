@@ -134,7 +134,7 @@ function redirect(url, type, initiator, forceRedirection, incognito) {
 			}
 			return randomInstance
 		}
-		case "librex": {
+		case "librey": {
 			return `${randomInstance}/search.php${url.search}`
 		}
 		case "send": {
@@ -328,6 +328,7 @@ function redirect(url, type, initiator, forceRedirection, incognito) {
 			}
 			return `${randomInstance}${url.pathname}${url.search}`
 		}
+		case "redlib":
 		case "libreddit": {
 			const subdomain = url.hostname.match(/^(?:(?:external-)?preview|i)(?=\.redd\.it)/)
 			if (!subdomain) return `${randomInstance}${url.pathname}${url.search}`
@@ -703,12 +704,14 @@ async function reverse(url) {
 
 const defaultInstances = {
 	'invidious': ['https://inv.vern.cc'],
+	'viewtube': ['https://viewtube.io'],
 	'piped': ['https://pipedapi-libre.kavin.rocks'],
 	'pipedMaterial': ['https://piped-material.xn--17b.net'],
 	'cloudtube': ['https://tube.cadence.moe'],
 	'poketube': ['https://poketube.fun'],
 	'proxiTok': ['https://proxitok.pabloferreiro.es'],
 	'nitter': ['https://nitter.net'],
+	'redlib': ['https://safereddit.com'],
 	'libreddit': ['https://libreddit.spike.codes'],
 	'teddit': ['https://teddit.net'],
 	'scribe': ['https://scribe.rip'],
