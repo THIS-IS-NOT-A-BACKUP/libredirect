@@ -396,6 +396,13 @@ function rewrite(url, frontend, randomInstance) {
 				return url.href
 			return `${randomInstance}${url.pathname}${url.search}`
 		}
+		case "freetubeMusic": {
+			if (url.hostname == "youtu.be" || url.hostname.endsWith("youtube.com") && url.pathname.startsWith("/live")) {
+				const watch = url.pathname.substring(url.pathname.lastIndexOf('/') + 1)
+				return `freetube://youtube.com/watch?v=${watch}`
+			}
+			return 'freetube://' + url.href
+		}
 		case "invidiousMusic": {
 			if (url.hostname == "youtu.be" || url.hostname.endsWith("youtube.com") && url.pathname.startsWith("/live")) {
 				const watch = url.pathname.substring(url.pathname.lastIndexOf('/') + 1)
@@ -682,6 +689,8 @@ async function reverse(url) {
 			}
 			case "tekstowo":
 				return `${config.services[service].url}/${url.search.slice(1)}`
+			case "goodreads":
+				return `https://goodreads.com${url.pathname}${url.search}`
 			default:
 				return
 		}
@@ -731,19 +740,20 @@ const defaultInstances = {
 	"tent": ['https://tent.sny.sh'],
 	"wolfreeAlpha": ['https://gqq.gitlab.io', 'https://uqq.gitlab.io'],
 	"laboratory": ['https://lab.vern.cc'],
-	'binternet': ['https://binternet.ahwx.org'],
+	'binternet': ['https://bn.bloat.cat'],
 	'pixivFe': ['https://pixivfe.exozy.me'],
 	'indestructables': ['https://indestructables.private.coffee'],
 	'destructables': ['https://ds.vern.cc'],
 	'safetwitch': ['https://safetwitch.drgns.space'],
 	'twineo': ['https://twineo.exozy.me'],
-	'proxigram': ['https://proxigram.privacyfrontends.repl.co'],
+	'proxigram': ['https://ig.opnxng.com'],
 	'tuboYoutube': ['https://tubo.migalmoreno.com'],
 	'tuboSoundcloud': ['https://tubo.migalmoreno.com'],
 	'tekstoLibre': ['https://davilarek.github.io/TekstoLibre'],
 	'skyview': ['https://skyview.social'],
 	'priviblur': ['https://pb.bloat.cat'],
 	'nitter': ['https://nitter.privacydev.net'],
+	'pasted': ['https://pasted.drakeerv.com'],
 }
 
 function initDefaults() {
