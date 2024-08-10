@@ -273,6 +273,9 @@ function rewrite(url, frontend, randomInstance) {
         else return `${randomInstance}${url.pathname}${url.search}&teddit_proxy=${url.hostname}`
       }
       return `${randomInstance}${url.pathname}${url.search}`
+    case "eddrit":
+      if (/^(?:(?:external-)?preview|i)\.redd\.it/.test(url.hostname)) return randomInstance
+      return `${randomInstance}${url.pathname}${url.search}`
     case "neuters": {
       const p = url.pathname
       if (p.startsWith("/article/") || p.startsWith("/pf/") || p.startsWith("/arc/") || p.startsWith("/resizer/")) {
@@ -540,6 +543,9 @@ function rewrite(url, frontend, randomInstance) {
       }
       if (url.pathname.startsWith("/artist")) return
       return `${randomInstance}${url.pathname}${url.search}`
+    case "ratAintTieba":
+      url.searchParams.delete("ie")
+      return `${randomInstance}${url.pathname}${url.search}`
     case "piped":
     case "pipedMaterial":
     case "cloudtube":
@@ -746,6 +752,7 @@ const defaultInstances = {
   redlib: ["https://safereddit.com"],
   libreddit: ["https://libreddit.spike.codes"],
   teddit: ["https://teddit.net"],
+  eddrit: ["https://eddrit.com"],
   scribe: ["https://scribe.rip"],
   libMedium: ["https://md.vern.cc"],
   quetre: ["https://quetre.iket.me"],
@@ -790,6 +797,7 @@ const defaultInstances = {
   nitter: ["https://nitter.privacydev.net"],
   pasted: ["https://pasted.drakeerv.com"],
   freetar: ["https://freetar.de"],
+  ratAintTieba: ["https://rat.fis.land"],
 }
 
 function initDefaults() {
