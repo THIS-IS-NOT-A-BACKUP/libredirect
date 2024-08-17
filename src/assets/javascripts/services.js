@@ -546,6 +546,34 @@ function rewrite(url, frontend, randomInstance) {
     case "ratAintTieba":
       url.searchParams.delete("ie")
       return `${randomInstance}${url.pathname}${url.search}`
+    case "shoelace": {
+      const reg = /^\/(?:(?:(?:[^\/])?\/post)|t)\/([^\/])/.exec(url.pathname)
+      if (reg) return `${randomInstance}/t/${reg[1]}${url.search}`
+      return `${randomInstance}${url.pathname}${url.search}`
+    }
+    case "skunkyArt": {
+      if (url.pathname.startsWith('/search')) return `${randomInstance}${url.pathname}${url.search}&scope=all`
+
+      const artReg = /^\/.*?\/art\/(.*)\/?/.exec(url.pathname)
+      if (artReg) return `${randomInstance}/post/art/${artReg[1]}${url.search}`
+
+      const userReg = /^\/([^\/]+)$/.exec(url.pathname)
+      if (userReg) return `${randomInstance}/user/${userReg[1]}${url.search}`
+
+      const galleryReg = /^\/.*?\/gallery(\/$|$)$/.exec(url.pathname)
+      if (galleryReg) return `${randomInstance}/user/${userReg[1]}?a=gallery`
+
+      return `${randomInstance}${url.pathname}${url.search}`
+    }
+    case "ytify": {
+      if (url.pathname.startsWith('/watch')) return `${randomInstance}/?s=${encodeURIComponent(url.searchParams.get('v'))}`
+
+      const channelReg = /\/channel\/([^\/]+)/.exec(url.pathname)
+      if (channelReg) return `${randomInstance}/list?channel=${channelReg[1]}`
+
+      if (url.pathname.startsWith('/playlist')) return `${randomInstance}/list?playlists=${encodeURIComponent(url.searchParams.get('list'))}`
+      return `${randomInstance}${url.pathname}${url.search}`
+    }
     case "piped":
     case "pipedMaterial":
     case "cloudtube":
@@ -798,6 +826,9 @@ const defaultInstances = {
   pasted: ["https://pasted.drakeerv.com"],
   freetar: ["https://freetar.de"],
   ratAintTieba: ["https://rat.fis.land"],
+  shoelace: ["https://shoelace.mint.lgbt"],
+  skunkyArt: ["https://skunky.bloat.cat"],
+  ytify: ["https://ytify.netlify.app"],
 }
 
 function initDefaults() {
