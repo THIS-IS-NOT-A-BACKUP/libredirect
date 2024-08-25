@@ -274,7 +274,7 @@
       "name": "Reddit",
       "options": {
         "enabled": false,
-        "frontend": "libreddit",
+        "frontend": "redlib",
         "unsupportedUrls": "bypass",
         "instance": "public",
         "redirectOnlyInIncognito": false
@@ -1114,6 +1114,11 @@
           "name": "LibreTranslate",
           "instanceList": true,
           "url": "https://github.com/LibreTranslate/LibreTranslate"
+        },
+        "translite": {
+          "name": "Translite",
+          "instanceList": true,
+          "url": "https://codeberg.org/gospodin/translite"
         }
       },
       "targets": [
@@ -1308,6 +1313,27 @@
       },
       "imageType": "svg",
       "url": "https://deviantart.com"
+    },
+    "geeksForGeeks": {
+      "frontends": {
+        "nerdsForNerds": {
+          "name": "NerdsforNerds",
+          "instanceList": true,
+          "url": "https://git.vern.cc/cobra/NerdsforNerds"
+        }
+      },
+      "targets": [
+        "^https?:\\/{2}(www\\.)?geeksforgeeks\\.org"
+      ],
+      "name": "GeeksforGeeks",
+      "options": {
+        "enabled": false,
+        "unsupportedUrls": "bypass",
+        "frontend": "nerdsForNerds",
+        "redirectOnlyInIncognito": false
+      },
+      "imageType": "svg",
+      "url": "https://www.geeksforgeeks.org"
     }
   }
 }
