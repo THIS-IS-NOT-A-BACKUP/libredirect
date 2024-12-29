@@ -122,7 +122,7 @@
         },
         "viewtube": {
           "name": "ViewTube",
-          "embeddable": false,
+          "embeddable": true,
           "instanceList": true,
           "url": "https://github.com/ViewTube/viewtube"
         },
@@ -559,6 +559,12 @@
           "embeddable": false,
           "instanceList": true,
           "url": "https://git.migalmoreno.com/tubo/about/"
+        },
+        "soundcloak": {
+          "name": "soundcloak",
+          "embeddable": false,
+          "instanceList": true,
+          "url": "https://git.maid.zone/stuff/soundcloak"
         }
       },
       "targets": [
