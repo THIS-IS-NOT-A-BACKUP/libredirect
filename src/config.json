@@ -284,6 +284,12 @@
           "instanceList": true,
           "url": "https://github.com/corenting/eddrit",
           "localhost": false
+        },
+        "troddit": {
+          "name": "Troddit",
+          "instanceList": false,
+          "url": "https://github.com/burhan-syed/troddit",
+          "localhost": false
         }
       },
       "targets": [
@@ -369,6 +375,12 @@
           "instanceList": true,
           "url": "https://github.com/pablouser1/ProxiTok",
           "localhost": true
+        },
+        "offtiktok": {
+          "name": "Offtiktok",
+          "instanceList": true,
+          "url": "https://github.com/MarsHeer/offtiktok",
+          "localhost": false
         }
       },
       "targets": [
@@ -534,6 +546,12 @@
           "name": "Binternet",
           "instanceList": true,
           "url": "https://github.com/Ahwxorg/Binternet",
+          "embeddable": true
+        },
+        "painterest": {
+          "name": "Painterest",
+          "instanceList": true,
+          "url": "https://codeberg.org/thirtysix/painterest",
           "embeddable": true
         }
       },
@@ -994,6 +1012,11 @@
           "name": "Wikiless",
           "instanceList": true,
           "url": "https://wikiless.org"
+        },
+        "wikimore": {
+          "name": "Wikimore",
+          "instanceList": true,
+          "url": "https://git.private.coffee/privatecoffee/wikimore"
         }
       },
       "targets": [
@@ -1241,6 +1264,11 @@
           "name": "Pasted",
           "instanceList": true,
           "url": "https://github.com/Dragynfruit/pasted"
+        },
+        "pasty": {
+          "name": "Pasty",
+          "instanceList": true,
+          "url": "https://github.com/lus/pasty"
         }
       },
       "targets": [
@@ -1262,6 +1290,11 @@
           "name": "Freetar",
           "instanceList": true,
           "url": "https://github.com/kmille/freetar"
+        },
+        "ultimateTab": {
+          "name": "Ultimate Tab",
+          "instanceList": false,
+          "url": "https://github.com/BenoitBellegarde/UltimateTab"
         }
       },
       "targets": [
@@ -1381,6 +1414,27 @@
       },
       "imageType": "svg",
       "url": "https://coub.com"
+    },
+    "chefkoch": {
+      "frontends": {
+        "gocook": {
+          "name": "GoCook",
+          "instanceList": true,
+          "url": "https://github.com/NoUmlautsAllowed/gocook"
+        }
+      },
+      "targets": [
+        "^https?:\\/{2}(www\\.)?chefkoch\\.de"
+      ],
+      "name": "Chefkoch",
+      "options": {
+        "enabled": false,
+        "unsupportedUrls": "bypass",
+        "frontend": "gocook",
+        "redirectOnlyInIncognito": false
+      },
+      "imageType": "svg",
+      "url": "https://www.chefkoch.de"
     }
   }
 }

@@ -54,9 +54,10 @@ function regexArray(service, url, config, options, frontend) {
  * @param {URL} url
  * @param {string} frontend
  * @param {string} randomInstance
+ * @param {string} type
  * @returns {undefined|string}
  */
-function rewrite(url, originUrl, frontend, randomInstance) {
+function rewrite(url, originUrl, frontend, randomInstance, type) {
   switch (frontend) {
     case "hyperpipe":
       for (const key of [...url.searchParams.keys()]) if (key !== "q") url.searchParams.delete(key)
@@ -229,10 +230,8 @@ function rewrite(url, originUrl, frontend, randomInstance) {
           return `${randomInstance}/preview/external-pre${url.pathname}${url.search}`
         case "i":
           return `${randomInstance}/img${url.pathname}`
-        default:
-          return `${randomInstance}/comments${url.pathname}`
       }
-      return randomInstance
+      return `${randomInstance}/comments${url.pathname}`
     }
     case "teddit":
       if (/^(?:(?:external-)?preview|i)\.redd\.it/.test(url.hostname)) {
@@ -240,6 +239,7 @@ function rewrite(url, originUrl, frontend, randomInstance) {
         else return `${randomInstance}${url.pathname}${url.search}&teddit_proxy=${url.hostname}`
       }
       return `${randomInstance}${url.pathname}${url.search}`
+    case "troddit":
     case "eddrit":
       if (/^(?:(?:external-)?preview|i)\.redd\.it/.test(url.hostname)) return randomInstance
       return `${randomInstance}${url.pathname}${url.search}`
@@ -287,6 +287,15 @@ function rewrite(url, originUrl, frontend, randomInstance) {
     }
     case "biblioReads":
       return `${randomInstance}${url.pathname}${url.search}`
+    case "wikimore": {
+      let hostSplit = url.host.split(".")
+      // wikiless doesn't have mobile view support yet
+      if (hostSplit[0] != "wikipedia" && hostSplit[0] != "www") {
+        const lang = url.hostname.split(".")[0]
+        return `${randomInstance}/wiki/${lang}${url.pathname}${url.search}${url.hash}`
+      }
+      return `${randomInstance}${url.pathname}${url.search}${url.hash}`
+    }
     case "wikiless": {
       let hostSplit = url.host.split(".")
       // wikiless doesn't have mobile view support yet
@@ -297,6 +306,7 @@ function rewrite(url, originUrl, frontend, randomInstance) {
       }
       return `${randomInstance}${url.pathname}${url.search}${url.hash}`
     }
+    case "offtiktok":
     case "proxiTok":
       if (url.pathname.startsWith("/email")) return randomInstance
       return `${randomInstance}${url.pathname}${url.search}`
@@ -358,7 +368,10 @@ function rewrite(url, originUrl, frontend, randomInstance) {
       }
     }
     case "binternet":
-      if (url.hostname == "i.pinimg.com") return `${randomInstance}/image_proxy.php?url=${url.href}`
+      if (url.hostname == "i.pinimg.com") return `${randomInstance}/image_proxy.php?url=${encodeURIComponent(url.href)}`
+      return `${randomInstance}${url.pathname}${url.search}`
+    case "painterest":
+      if (url.hostname == "i.pinimg.com") return `${randomInstance}/_/proxy?url=${encodeURIComponent(url.href)}`
       return `${randomInstance}${url.pathname}${url.search}`
     case "laboratory": {
       let path = url.pathname
@@ -384,10 +397,14 @@ function rewrite(url, originUrl, frontend, randomInstance) {
       return `${randomInstance}${url.pathname}${url.search}`
     }
     case "invidious": {
+      // tracker
       url.searchParams.delete("si")
+
+      if (type == "sub_frame") url.searchParams.append("autoplay", "0")
+
       if (url.hostname == "youtu.be" || (url.hostname.endsWith("youtube.com") && url.pathname.startsWith("/live"))) {
         const watch = url.pathname.substring(url.pathname.lastIndexOf("/") + 1)
-        return `${randomInstance}/watch?v=${watch}${url.search.replace("?", "&")}`
+        return `${randomInstance}/watch?v=${watch}&${url.search.substring(1)}`
       }
       if (url.hostname.endsWith("youtube.com") && url.pathname.startsWith("/redirect?")) return url.href
       return `${randomInstance}${url.pathname}${url.search}`
@@ -506,6 +523,7 @@ function rewrite(url, originUrl, frontend, randomInstance) {
       }
       return `${randomInstance}${url.pathname}${url.search}`
     }
+    case "ultimateTab":
     case "freetar":
       if (url.pathname.startsWith("/search.php")) {
         url.searchParams.set("search_term", url.searchParams.get("value"))
@@ -557,9 +575,10 @@ function rewrite(url, originUrl, frontend, randomInstance) {
 
     case "duckDuckGoAiChat":
       return "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1"
-    
+
     case "soundcloak":
-      if (url.pathname.startsWith("/feed") || url.pathname.startsWith("/stream")) { // this feature requires authentication and is unsupported, so just redirect to main page
+      if (url.pathname.startsWith("/feed") || url.pathname.startsWith("/stream")) {
+        // this feature requires authentication and is unsupported, so just redirect to main page
         return randomInstance
       }
 
@@ -578,7 +597,7 @@ function rewrite(url, originUrl, frontend, randomInstance) {
         }
 
         if (type) {
-          type = "&type="+type
+          type = "&type=" + type
         } else {
           return randomInstance // fallback for unsupported search types (searching for anything for example)
         }
@@ -668,7 +687,7 @@ function redirect(url, type, originUrl, documentUrl, incognito, forceRedirection
   }
   if (!frontend) return
 
-  return rewrite(url, originUrl, frontend, randomInstance)
+  return rewrite(url, originUrl, frontend, randomInstance, type)
 }
 
 /**
@@ -797,7 +816,8 @@ async function reverse(url) {
         return `https://goodreads.com${url.pathname}${url.search}`
       case "soundcloud":
         if (frontend == "soundcloak") {
-          if (url.pathname.includes("/_/")) { // soundcloak-specific pages
+          if (url.pathname.includes("/_/")) {
+            // soundcloak-specific pages
             return `${config.services[service].url}${url.pathname.split("/_/")[0]}`
           }
 
@@ -843,8 +863,10 @@ const defaultInstances = {
   lightTube: ["https://tube.kuylar.dev"],
   poketube: ["https://poketube.fun"],
   proxiTok: ["https://proxitok.pabloferreiro.es"],
+  offtiktok: ["https://www.offtiktok.com"],
   redlib: ["https://safereddit.com"],
   eddrit: ["https://eddrit.com"],
+  troddit: ["https://www.troddit.com"],
   scribe: ["https://scribe.rip"],
   libMedium: ["https://md.vern.cc"],
   quetre: ["https://quetre.iket.me"],
@@ -872,6 +894,7 @@ const defaultInstances = {
   wolfreeAlpha: ["https://gqq.gitlab.io", "https://uqq.gitlab.io"],
   laboratory: ["https://lab.vern.cc"],
   binternet: ["https://bn.bloat.cat"],
+  painterest: ["https://pt.bloat.cat"],
   pixivFe: ["https://pixivfe.exozy.me"],
   liteXiv: ["https://litexiv.exozy.me"],
   indestructables: ["https://indestructables.private.coffee"],
@@ -886,14 +909,18 @@ const defaultInstances = {
   priviblur: ["https://pb.bloat.cat"],
   nitter: ["https://nitter.privacydev.net"],
   pasted: ["https://pasted.drakeerv.com"],
+  pasty: ["https://pasty.lus.pm"],
   freetar: ["https://freetar.de"],
+  ultimateTab: ["https://ultimate-tab.com"],
   ratAintTieba: ["https://rat.fis.land"],
   shoelace: ["https://shoelace.mint.lgbt"],
   skunkyArt: ["https://skunky.bloat.cat"],
   ytify: ["https://ytify.us.kg"],
   nerdsForNerds: ["https://nn.vern.cc"],
   koub: ["https://koub.clovius.club"],
-  soundcloak: ["https://soundcloak.fly.dev"]
+  soundcloak: ["https://soundcloak.fly.dev"],
+  gocook: ["https://cook.adminforge.de"],
+  wikimore: ["https://wikimore.private.coffee"],
 }
 
 async function getDefaults() {
