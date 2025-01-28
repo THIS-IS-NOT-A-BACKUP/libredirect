@@ -477,6 +477,11 @@
           "name": "LiteXiv",
           "instanceList": true,
           "url": "https://codeberg.org/Peaksol/LiteXiv"
+        },
+        "vixipy": {
+          "name": "Vixipy",
+          "instanceList": true,
+          "url": "https://codeberg.org/vixipy/Vixipy"
         }
       },
       "targets": [
@@ -683,6 +688,11 @@
           "name": "LibMedium",
           "instanceList": true,
           "url": "https://github.com/realaravinth/libmedium"
+        },
+        "small": {
+          "name": "Small",
+          "instanceList": true,
+          "url": "https://git.private.coffee/PrivateCoffee/small"
         }
       },
       "targets": [
@@ -983,15 +993,20 @@
     "instructables": {
       "name": "Instructables",
       "frontends": {
-        "indestructables": {
-          "name": "Indestructables",
+        "structables": {
+          "name": "Structables",
           "instanceList": true,
-          "url": "https://indestructables.codeberg.page"
+          "url": "https://github.com/PrivateCoffee/structables"
         },
         "destructables": {
           "name": "Destructables",
           "instanceList": true,
           "url": "https://git.vern.cc/cobra/Destructables"
+        },
+        "indestructables": {
+          "name": "Indestructables",
+          "instanceList": true,
+          "url": "https://indestructables.codeberg.page"
         }
       },
       "targets": [
@@ -1000,7 +1015,7 @@
       "options": {
         "enabled": false,
         "unsupportedUrls": "bypass",
-        "frontend": "indestructables",
+        "frontend": "structables",
         "redirectOnlyInIncognito": false
       },
       "imageType": "svg",
@@ -1379,6 +1394,11 @@
           "name": "NerdsforNerds",
           "instanceList": true,
           "url": "https://git.vern.cc/cobra/NerdsforNerds"
+        },
+        "ducksForDucks": {
+          "name": "Ducks for Ducks",
+          "instanceList": true,
+          "url": "https://git.private.coffee/PrivateCoffee/ducksforducks"
         }
       },
       "targets": [

@@ -100,6 +100,7 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
       if (/\/@[a-z]+\//.exec(url.pathname)) return randomInstance
       return `${randomInstance}${url.pathname}${url.search}`
     }
+    case "small":
     case "libMedium":
     case "scribe": {
       const regex = url.hostname.match(/^(link|cdn-images-\d+|.*)\.medium\.com/)
@@ -392,6 +393,15 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
       const regex = /\/[a-z]{1,3}\/(.*)/.exec(url.pathname)
       if (regex) {
         const path = regex[1]
+        return `${randomInstance}/${path}${url.search}`
+      }
+      return `${randomInstance}${url.pathname}${url.search}`
+    }
+    case "vixipy": {
+      const regex = /\/[a-z]{1,3}\/(.*)/.exec(url.pathname)
+      if (regex) {
+        let path = regex[1]
+        if (path.startsWith("tags/")) path = path.replace(/tags/, "tag")
         return `${randomInstance}/${path}${url.search}`
       }
       return `${randomInstance}${url.pathname}${url.search}`
@@ -869,6 +879,7 @@ const defaultInstances = {
   troddit: ["https://www.troddit.com"],
   scribe: ["https://scribe.rip"],
   libMedium: ["https://md.vern.cc"],
+  small: ["https://small.bloat.cat"],
   quetre: ["https://quetre.iket.me"],
   libremdb: ["https://libremdb.iket.me"],
   simplyTranslate: ["https://simplytranslate.org"],
@@ -897,8 +908,10 @@ const defaultInstances = {
   painterest: ["https://pt.bloat.cat"],
   pixivFe: ["https://pixivfe.exozy.me"],
   liteXiv: ["https://litexiv.exozy.me"],
+  vixipy: ["https://vx.maid.zone"],
   indestructables: ["https://indestructables.private.coffee"],
   destructables: ["https://ds.vern.cc"],
+  structables: ["https://structables.private.coffee"],
   safetwitch: ["https://safetwitch.drgns.space"],
   twineo: ["https://twineo.exozy.me"],
   proxigram: ["https://ig.opnxng.com"],
@@ -917,6 +930,7 @@ const defaultInstances = {
   skunkyArt: ["https://skunky.bloat.cat"],
   ytify: ["https://ytify.us.kg"],
   nerdsForNerds: ["https://nn.vern.cc"],
+  ducksForDucks: ["https://ducksforducks.private.coffee"],
   koub: ["https://koub.clovius.club"],
   soundcloak: ["https://soundcloak.fly.dev"],
   gocook: ["https://cook.adminforge.de"],
