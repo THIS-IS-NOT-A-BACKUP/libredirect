@@ -36,11 +36,17 @@ function all(service, frontend, options, config) {
  */
 function regexArray(service, url, config, options, frontend) {
   let targetList = config.services[service].targets
-  if (frontend && "excludeTargets" in config.services[service].frontends[frontend]) {
-    if (service !== "search" || !options["search"].redirectGoogle) {
+  if (frontend) {
+    if (
+      "excludeTargets" in config.services[service].frontends[frontend] &&
+      (service !== "search" || !options["search"].redirectGoogle)
+    ) {
       targetList = targetList.filter(
         val => !config.services[service].frontends[frontend].excludeTargets.includes(targetList.indexOf(val))
       )
+    }
+    if (service === "twitter" && options["twitter"].disableTwimg) {
+      targetList = targetList.splice(2)
     }
   }
   for (const targetString in targetList) {
@@ -68,6 +74,7 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
     case "searxng":
       for (const key of [...url.searchParams.keys()]) if (key !== "q") url.searchParams.delete(key)
       return `${randomInstance}/${url.search}`
+    case "websurfx":
     case "whoogle":
       for (const key of [...url.searchParams.keys()]) if (key !== "q") url.searchParams.delete(key)
       return `${randomInstance}/search${url.search}`
@@ -102,6 +109,7 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
     }
     case "small":
     case "libMedium":
+    case "freedium":
     case "scribe": {
       const regex = url.hostname.match(/^(link|cdn-images-\d+|.*)\.medium\.com/)
       if (regex && regex.length > 1) {
@@ -373,6 +381,8 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
       return `${randomInstance}${url.pathname}${url.search}`
     case "painterest":
       if (url.hostname == "i.pinimg.com") return `${randomInstance}/_/proxy?url=${encodeURIComponent(url.href)}`
+      const regex = /^\/pin\/[^\/]+/.exec(url.pathname)
+      if (regex) return `${randomInstance}${regex[0]}`
       return `${randomInstance}${url.pathname}${url.search}`
     case "laboratory": {
       let path = url.pathname
@@ -388,6 +398,7 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
       }
       return `${randomInstance}${url.pathname}${url.search}`
     }
+    case "pixivViewer":
     case "liteXiv":
     case "pixivFe": {
       const regex = /\/[a-z]{1,3}\/(.*)/.exec(url.pathname)
@@ -463,12 +474,10 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
       return `${randomInstance}${url.pathname}${url.search}`
     }
     case "libremdb": {
-      if (url.pathname.startsWith("/Name")) {
-        for (const [key, value] of url.searchParams.entries()) {
-          return `${randomInstance}/title/${encodeURIComponent(key)}`
-        }
+      if (/\/((?:name|title)\/\w+)\/?$/.exec(url.pathname)) {
+        return `${randomInstance}${url.pathname}${url.search}`
       }
-      return `${randomInstance}${url.pathname}${url.search}`
+      return randomInstance
     }
     case "tuboYoutube":
       url.searchParams.delete("si")
@@ -576,13 +585,14 @@ function rewrite(url, originUrl, frontend, randomInstance, type) {
         return `${randomInstance}/list?playlists=${encodeURIComponent(url.searchParams.get("list"))}`
       return `${randomInstance}${url.pathname}${url.search}`
     }
-    case "koub":
+    case "koub": {
       if (url.pathname.startsWith("/view/") || url.pathname.startsWith("/stories/")) {
         return `${randomInstance}${url.pathname}${url.search}`
       }
       const accountReg = /^\/([^\/]+)\/?$/.exec(url.pathname)
       if (accountReg) return `${randomInstance}/account${url.pathname}${url.search}`
-
+      return randomInstance
+    }
     case "duckDuckGoAiChat":
       return "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&duckai=1"
 
@@ -797,6 +807,7 @@ async function reverse(url) {
       case "quora":
       case "twitter":
       case "medium":
+      case "pinterest":
         return `${config.services[service].url}${url.pathname}${url.search}`
       case "fandom": {
         let regex = url.pathname.match(/^\/([a-zA-Z0-9-]+)\/wiki\/(.*)/)
@@ -886,6 +897,7 @@ const defaultInstances = {
   scribe: ["https://scribe.rip"],
   libMedium: ["https://md.vern.cc"],
   small: ["https://small.bloat.cat"],
+  freedium: ["https://freedium.cfd"],
   quetre: ["https://quetre.iket.me"],
   libremdb: ["https://libremdb.iket.me"],
   simplyTranslate: ["https://simplytranslate.org"],
@@ -893,6 +905,7 @@ const defaultInstances = {
   mozhi: ["https://mozhi.aryak.me"],
   searxng: ["https://nyc1.sx.ggtyler.dev"],
   "4get": ["https://4get.ca"],
+  websurfx: ["https://alamin655-spacex.hf.space"],
   rimgo: ["https://rimgo.vern.cc"],
   hyperpipe: ["https://hyperpipe.surge.sh"],
   osm: ["https://www.openstreetmap.org"],
@@ -908,12 +921,12 @@ const defaultInstances = {
   meme: ["https://mm.vern.cc"],
   waybackClassic: ["https://wayback-classic.net"],
   tent: ["https://tent.sny.sh"],
-  wolfreeAlpha: ["https://gqq.gitlab.io", "https://uqq.gitlab.io"],
   laboratory: ["https://lab.vern.cc"],
   binternet: ["https://bn.bloat.cat"],
   painterest: ["https://pt.bloat.cat"],
   pixivFe: ["https://pixiv.perennialte.ch"],
   liteXiv: ["https://litexiv.465321.best", "https://litexiv.bloat.cat"],
+  pixivViewer: ["https://pixiv.pictures"],
   vixipy: ["https://vx.maid.zone"],
   indestructables: ["https://indestructables.private.coffee"],
   destructables: ["https://ds.vern.cc"],
@@ -941,6 +954,8 @@ const defaultInstances = {
   soundcloak: ["https://soundcloak.fly.dev"],
   gocook: ["https://cook.adminforge.de"],
   wikimore: ["https://wikimore.private.coffee"],
+  libreTranslate: ["https://libretranslate.com"],
+  cryptPad: ["https://cryptpad.org"]
 }
 
 async function getDefaults() {
